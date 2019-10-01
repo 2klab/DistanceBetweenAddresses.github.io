@@ -43,27 +43,27 @@
             // textBox1
             // 
             this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox1.Location = new System.Drawing.Point(167, 3);
+            this.textBox1.Location = new System.Drawing.Point(77, 3);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(511, 74);
+            this.textBox1.Size = new System.Drawing.Size(601, 74);
             this.textBox1.TabIndex = 0;
             // 
             // textBox2
             // 
             this.textBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox2.Location = new System.Drawing.Point(167, 83);
+            this.textBox2.Location = new System.Drawing.Point(77, 83);
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(511, 74);
+            this.textBox2.Size = new System.Drawing.Size(601, 74);
             this.textBox2.TabIndex = 1;
             // 
             // button1
             // 
             this.button1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button1.Location = new System.Drawing.Point(167, 163);
+            this.button1.Location = new System.Drawing.Point(77, 163);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(511, 74);
+            this.button1.Size = new System.Drawing.Size(601, 74);
             this.button1.TabIndex = 2;
             this.button1.Text = "Calc";
             this.button1.UseVisualStyleBackColor = true;
@@ -98,13 +98,12 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(3, 160);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(158, 17);
+            this.label4.Size = new System.Drawing.Size(0, 17);
             this.label4.TabIndex = 5;
-            this.label4.Text = "ravibioshop@gmail.com";
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(167, 243);
+            this.textBox4.Location = new System.Drawing.Point(77, 243);
             this.textBox4.Multiline = true;
             this.textBox4.Name = "textBox4";
             this.textBox4.ReadOnly = true;
@@ -142,7 +141,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(904, 462);
+            this.ClientSize = new System.Drawing.Size(731, 373);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Form1";
             this.Text = "Form1";

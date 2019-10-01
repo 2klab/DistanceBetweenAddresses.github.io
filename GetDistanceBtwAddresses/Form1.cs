@@ -14,77 +14,26 @@ namespace GetDistanceBtwAddresses
             InitializeComponent();
         }
 
-        public GeocodeResponse GetGeocode(string address)
-        {
-            ForwardGeocoder fg = new ForwardGeocoder();
-            ForwardGeocodeRequest fgr = new ForwardGeocodeRequest();
-            //essayer streetaddress
-            Task<GeocodeResponse[]> ar = fg.Geocode(new ForwardGeocodeRequest
-            {
-                queryString = address,
-                DedupeResults = true,
-                BreakdownAddressElements = true,
-                ShowExtraTags = true,
-                ShowAlternativeNames = true,
-                ShowGeoJSON = true
-            });
-            ar.Wait();
-
-            GeocodeResponse gr;
-            if (ar.Result.Length == 0)
-                return null;
-
-            gr = ar.Result[0];
-            return gr;
-        }
-
-        public Boolean IsAddressValid(string address)
-        {
-            GeocodeResponse gr = GetGeocode(address);
-            if (gr is null)
-                return false;
-            else
-                return true;
-        }
-
-        public double GetDistanceInMeter(GeocodeResponse gr1, GeocodeResponse gr2)
-        {
-            GeoCoordinate pin1 = new GeoCoordinate(gr1.Latitude, gr1.Longitude);
-            GeoCoordinate pin2 = new GeoCoordinate(gr2.Latitude, gr2.Longitude);
-
-            double distanceBetween = pin1.GetDistanceTo(pin2);
-            return Math.Round(distanceBetween, 0);
-        }
-
-        public Boolean IsWithinDistanceInMeter(GeocodeResponse gr1, GeocodeResponse gr2, double distance = 500)
-        {
-            double dist = GetDistanceInMeter(gr1, gr2);
-            if (dist <= distance)
-                return true;
-            else
-                return false;
-        }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            string address1 = "57 avenue de l'arche, 92400,Courbevoie, France";
-            GeocodeResponse gr1 = GetGeocode(address1);
 
+            string address1 = "57 avenue de l'arche, 92400 Courbevoie, France";
+            GeocodeAddress ga1 = new GeocodeAddress(address1);
 
-            string address2 = "4 bd montparnasse, 75014 Paris, France";
-            GeocodeResponse gr2 = GetGeocode(address2);
+            string address2 = "14 avenue leonard de vinci, 92400 Courbevoie, France";
+            GeocodeAddress ga2 = new GeocodeAddress(address2);
 
-            double distanceBetween = GetDistanceInMeter(gr1, gr2);
+            double distanceBetween = ga1.GetDistanceInMeter(ga2);
 
-            string no1 = gr1.Address.Pedestrian + gr1.Address.Road;
-            string no2 = gr2.Address.Pedestrian + gr2.Address.Road;
-            textBox4.Text += " From:" + gr1.Address.HouseNumber + " " + no1 + " " + gr1.Address.PostCode + " " + gr1.Address.Town;
-            textBox4.Text += " To:" + gr2.Address.HouseNumber + " " + no2 + " " + gr2.Address.PostCode + " " + gr2.Address.Town;
-            textBox4.Text += " lat=" + gr1.Latitude.ToString() + "; lon=" + gr1.Longitude.ToString();
+            string no1 = ga1.gr.Address.Pedestrian + ga1.gr.Address.Road;
+            string no2 = ga2.gr.Address.Pedestrian + ga2.gr.Address.Road;
+            textBox4.Text += "From:" + ga1.gr.Address.HouseNumber + " " + no1 + " " + ga1.gr.Address.PostCode + " " + ga1.gr.Address.Town;
+            textBox4.Text += " To:" + ga2.gr.Address.HouseNumber + " " + no2 + " " + ga2.gr.Address.PostCode + " " + ga2.gr.Address.Town;
+            textBox4.Text += " lat=" + ga1.gr.Latitude.ToString() + "; lon=" + ga1.gr.Longitude.ToString();
             textBox4.Text += ". distance=" + distanceBetween + " m";
-            textBox4.Text += ". Within 500m? " + IsWithinDistanceInMeter(gr1, gr2, 500);
-            textBox4.Text += ". Is valid address ? " + IsAddressValid(address1);
-
+            textBox4.Text += ". Within 500m? " + ga1.IsWithinDistanceInMeter(ga2, 500);
+            textBox4.Text += ". Is address valid? " + ga1.IsAddressValid(address2);
         }
 
         private void Button1_Click(object sender, EventArgs e)
