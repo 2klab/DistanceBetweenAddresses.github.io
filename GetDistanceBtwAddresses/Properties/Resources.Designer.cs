@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GetDistanceBtwAddresses.Properties {
+namespace GetDistanceBetweenAddresses.Properties {
     using System;
     
     

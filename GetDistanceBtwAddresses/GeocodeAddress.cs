@@ -1,30 +1,41 @@
 ﻿using Nominatim.API.Geocoders;
 using Nominatim.API.Models;
 using System;
-using System.Collections.Generic;
 using System.Device.Location;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace GetDistanceBtwAddresses
+namespace GetDistanceBetweenAddresses
 {
+#pragma warning disable CA1305 // Specify IFormatProvider
+    public class GeocodeAddressSettings
+    {
+        /// <summary>
+        /// Maximum delivery distance in meters around a point
+        /// </summary>
+        public float MaxDeliveryDistanceInMeter { get; set; } = 500;
+
+    }
     public class GeocodeAddress
     {
         public GeocodeAddress() { }
         public GeocodeAddress(string address)
         {
             Address = address;
-            gr=GetGeocode(Address);
+            GeocodeResponse = GetGeocode(Address);
         }
         public string Address { get; set; }
-        public GeocodeResponse gr { get; set; }
-        public GeoCoordinate pin1;
+        public GeocodeResponse GeocodeResponse { get; set; }
+        private GeoCoordinate pin1;
 
-        public double GetDistanceInMeter(GeocodeAddress gr2)
+        public override string ToString()
         {
-            pin1 = new GeoCoordinate(gr.Latitude, gr.Longitude);
-            GeoCoordinate pin2 = new GeoCoordinate(gr2.gr.Latitude, gr2.gr.Longitude);
+            return GeocodeResponse.Address.HouseNumber.ToString();
+        }
+        public double GetDistanceInMeter(GeocodeAddress address)
+        {
+            pin1 = new GeoCoordinate(GeocodeResponse.Latitude, GeocodeResponse.Longitude);
+#pragma warning disable CA1062 // Validate arguments of public methods
+            GeoCoordinate pin2 = new GeoCoordinate(address.GeocodeResponse.Latitude, address.GeocodeResponse.Longitude);
 
             double distanceBetween = pin1.GetDistanceTo(pin2);
             return Math.Round(distanceBetween, 0);
@@ -51,8 +62,8 @@ namespace GetDistanceBtwAddresses
             if (ar.Result.Length == 0)
                 return null;
 
-            gr = ar.Result[0];
-            return gr;
+            GeocodeResponse = ar.Result[0];
+            return GeocodeResponse;
         }
 
         public bool IsAddressValid(string address)
