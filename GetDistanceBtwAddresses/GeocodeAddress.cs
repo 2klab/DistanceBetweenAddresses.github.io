@@ -21,36 +21,89 @@ namespace GetDistanceBetweenAddresses
         public GeocodeAddress(string address)
         {
             Address = address;
-            GeocodeResponse = GetGeocode(Address);
         }
-        public string Address { get; set; }
-        public GeocodeResponse GeocodeResponse { get; set; }
-        private GeoCoordinate pin1;
 
-        public override string ToString()
+
+        private string _Address;
+        /// <summary>
+        /// As soon as the address is set, calculate its GeoCoordinates
+        /// Could be postponed using a "dirty" flag
+        /// </summary>
+        public string Address
         {
-            return GeocodeResponse.Address.HouseNumber.ToString();
+            get
+            {
+                return _Address;
+            }
+            set
+            {
+                _Address = value;
+                CalcGeocodeResponse();
+            }
         }
-        public double GetDistanceInMeter(GeocodeAddress address)
+
+        public string FixedAdress
         {
-            pin1 = new GeoCoordinate(GeocodeResponse.Latitude, GeocodeResponse.Longitude);
+            get
+            {
+                if (GeocodeResponse == null || GeocodeResponse.Address == null)
+                    return UndefinedString;
+                string no1 = GeocodeResponse.Address.Pedestrian + GeocodeResponse.Address.Road;
+                return GeocodeResponse.Address.HouseNumber + " " + no1 + " " + GeocodeResponse.Address.PostCode + " " + GeocodeResponse.Address.Town;
+            }
+
+        }
+
+        public double Latitude
+        {
+            get
+            {
+                if (GeocodeResponse == null || GeocodeResponse.Address == null)
+                    return Double.NaN;
+                else
+                    return GeocodeResponse.Latitude;
+            }
+        }
+
+        public double Longitude
+        {
+            get
+            {
+                if (GeocodeResponse == null || GeocodeResponse.Address == null)
+                    return Double.NaN;
+                else
+                    return GeocodeResponse.Longitude;
+            }
+        }
+
+        private GeocodeResponse GeocodeResponse { get; set; } = null;
+        private GeoCoordinate pinFrom;
+        public string UndefinedString = "<Undefined>";
+        public double GetDistanceInMeter(GeocodeAddress gAddressTo)
+        {
+            if (GeocodeResponse == null || gAddressTo.GeocodeResponse == null)
+                return -1;
+            pinFrom = new GeoCoordinate(GeocodeResponse.Latitude, GeocodeResponse.Longitude);
 #pragma warning disable CA1062 // Validate arguments of public methods
-            GeoCoordinate pin2 = new GeoCoordinate(address.GeocodeResponse.Latitude, address.GeocodeResponse.Longitude);
+            GeoCoordinate pinTo = new GeoCoordinate(gAddressTo.GeocodeResponse.Latitude, gAddressTo.GeocodeResponse.Longitude);
 
-            double distanceBetween = pin1.GetDistanceTo(pin2);
+            double distanceBetween = pinFrom.GetDistanceTo(pinTo);
             return Math.Round(distanceBetween, 0);
         }
 
-        public GeocodeResponse GetGeocode(string address)
+        public void CalcGeocodeResponse()
         {
-            Address = address;
+            //if (address == _address)
+            //     return GeocodeResponse;
+
+            //SetAddress(address);
 
             ForwardGeocoder fg = new ForwardGeocoder();
             ForwardGeocodeRequest fgr = new ForwardGeocodeRequest();
             //essayer streetaddress
             Task<GeocodeResponse[]> ar = fg.Geocode(new ForwardGeocodeRequest
             {
-                queryString = address,
+                queryString = Address,
                 DedupeResults = true,
                 BreakdownAddressElements = true,
                 ShowExtraTags = true,
@@ -60,17 +113,14 @@ namespace GetDistanceBetweenAddresses
             ar.Wait();
 
             if (ar.Result.Length == 0)
-                return null;
-
-            GeocodeResponse = ar.Result[0];
-            return GeocodeResponse;
+                GeocodeResponse = null;
+            else
+                GeocodeResponse = ar.Result[0];
         }
 
-        public bool IsAddressValid(string address)
+        public bool IsAddressValid()
         {
-            this.Address = address;
-            GeocodeResponse gr = GetGeocode(address);
-            if (gr is null)
+            if (GeocodeResponse == null)
                 return false;
             else
                 return true;
