@@ -49,7 +49,9 @@ namespace GetDistanceBetweenAddresses
                 if (GeocodeResponse == null || GeocodeResponse.Address == null)
                     return UndefinedString;
                 string no1 = GeocodeResponse.Address.Pedestrian + GeocodeResponse.Address.Road;
-                return GeocodeResponse.Address.HouseNumber + " " + no1 + " " + GeocodeResponse.Address.PostCode + " " + GeocodeResponse.Address.Town;
+                return GeocodeResponse.Address.HouseNumber + " " + no1 + " " + GeocodeResponse.Address.PostCode 
+                    + " " + GeocodeResponse.Address.Town
+                +" " + GeocodeResponse.Address.Country;
             }
 
         }

@@ -30,6 +30,8 @@ namespace GetDistanceBetweenAddresses
 
             double distanceBetween = GeocodeAddress1.GetDistanceInMeter(GeocodeAddress2);
 
+            textBox3.Text = GeocodeAddress1.FixedAdress;
+            textBox5.Text = GeocodeAddress2.FixedAdress;
             textBoxResult.Text = "";
             textBoxResult.Text += "From: " + GeocodeAddress1.FixedAdress;
             textBoxResult.Text += " To: " + GeocodeAddress2.FixedAdress;
