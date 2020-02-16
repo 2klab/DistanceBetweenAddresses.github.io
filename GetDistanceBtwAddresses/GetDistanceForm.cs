@@ -12,33 +12,33 @@ namespace GetDistanceBetweenAddresses
             InitializeComponent();
         }
 
-        static public GeocodeAddress GeocodeAddress1 = new GeocodeAddress("57 avenue de l'arche, 92400 Courbevoie, France");
-        static public GeocodeAddress GeocodeAddress2 = new GeocodeAddress("14 avenue leonard de vinci, 92400 Courbevoie, France");
+        static public GeocodeAddress GeocodeAddressFrom = new GeocodeAddress("12 r du capitaine guynemer, 92");
+        static public GeocodeAddress GeocodeAddressTo = new GeocodeAddress("5 place des trois freres lebeuf");
 
         GeocodeAddressSettings settings = new GeocodeAddressSettings();
         private void Form1_Load(object sender, EventArgs e)
         {
-            textBox1.Text = GeocodeAddress1.Address;
-            textBox2.Text = GeocodeAddress2.Address;
+            textBox1.Text = GeocodeAddressFrom.Address;
+            textBox2.Text = GeocodeAddressTo.Address;
             ButtonCheck_Click(null, null);
         }
 
         private void ButtonCheck_Click(object sender, EventArgs e)
         {
-            GeocodeAddress1.Address = textBox1.Text;
-            GeocodeAddress2.Address = textBox2.Text;
+            GeocodeAddressFrom.Address = textBox1.Text;
+            GeocodeAddressTo.Address = textBox2.Text;
 
-            double distanceBetween = GeocodeAddress1.GetDistanceInMeter(GeocodeAddress2);
+            double distanceBetween = GeocodeAddressFrom.GetDistanceInMeter(GeocodeAddressTo);
 
-            textBox3.Text = GeocodeAddress1.FixedAdress;
-            textBox5.Text = GeocodeAddress2.FixedAdress;
-            textBoxResult.Text = "";
-            textBoxResult.Text += "From: " + GeocodeAddress1.FixedAdress;
-            textBoxResult.Text += " To: " + GeocodeAddress2.FixedAdress;
-            textBoxResult.Text += " lat= " + GeocodeAddress1.Latitude.ToString() + "; lon=" + GeocodeAddress1.Longitude.ToString();
-            textBoxResult.Text += ". distance= " + distanceBetween + " m";
-            textBoxResult.Text += ". Within 500m? " + GeocodeAddress1.IsWithinDistanceInMeter(GeocodeAddress2, settings.MaxDeliveryDistanceInMeter);
-            textBoxResult.Text += ". Is the address valid? " + GeocodeAddress1.IsAddressValid();
+            textBox3.Text = GeocodeAddressFrom.FixedAdress;
+            textBox5.Text = GeocodeAddressTo.FixedAdress;
+            textBoxResult.Text = "From: " + GeocodeAddressFrom.FixedAdress;
+            textBoxResult.Text += Environment.NewLine + "To: " + GeocodeAddressTo.FixedAdress;
+            textBoxResult.Text += Environment.NewLine + "Latitude= " + GeocodeAddressFrom.Latitude.ToString() + "; longitude=" + GeocodeAddressFrom.Longitude.ToString();
+            textBoxResult.Text += Environment.NewLine + "Distance= " + distanceBetween + " m";
+            textBoxResult.Text += Environment.NewLine + "Within 500m? " + GeocodeAddressFrom.IsWithinDistanceInMeter(GeocodeAddressTo, settings.MaxFlyingDeliveryDistanceInMeter);
+            textBoxResult.Text += Environment.NewLine + "Is From: address valid? " + GeocodeAddressFrom.IsAddressValid();
+            textBoxResult.Text += Environment.NewLine + "Is To: address valid? " + GeocodeAddressTo.IsAddressValid();
         }
     }
 }

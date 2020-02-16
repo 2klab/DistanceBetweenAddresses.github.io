@@ -10,9 +10,9 @@ namespace GetDistanceBetweenAddresses
     public class GeocodeAddressSettings
     {
         /// <summary>
-        /// Maximum delivery distance in meters around a point
+        /// Maximum flying delivery distance in meters around a point
         /// </summary>
-        public float MaxDeliveryDistanceInMeter { get; set; } = 500;
+        public float MaxFlyingDeliveryDistanceInMeter { get; set; } = 500;
 
     }
     public class GeocodeAddress
@@ -49,11 +49,10 @@ namespace GetDistanceBetweenAddresses
                 if (GeocodeResponse == null || GeocodeResponse.Address == null)
                     return UndefinedString;
                 string no1 = GeocodeResponse.Address.Pedestrian + GeocodeResponse.Address.Road;
-                return GeocodeResponse.Address.HouseNumber + " " + no1 + " " + GeocodeResponse.Address.PostCode 
+                return GeocodeResponse.Address.HouseNumber + " " + no1 + " " + GeocodeResponse.Address.PostCode
                     + " " + GeocodeResponse.Address.Town
-                +" " + GeocodeResponse.Address.Country;
+                + " " + GeocodeResponse.Address.Country;
             }
-
         }
 
         public double Latitude
@@ -83,8 +82,8 @@ namespace GetDistanceBetweenAddresses
         public string UndefinedString = "<Undefined>";
         public double GetDistanceInMeter(GeocodeAddress gAddressTo)
         {
-            if (GeocodeResponse == null || gAddressTo.GeocodeResponse == null)
-                return -1;
+            if (GeocodeResponse == null || gAddressTo == null || gAddressTo.GeocodeResponse == null)
+                return Double.NaN;
             pinFrom = new GeoCoordinate(GeocodeResponse.Latitude, GeocodeResponse.Longitude);
 #pragma warning disable CA1062 // Validate arguments of public methods
             GeoCoordinate pinTo = new GeoCoordinate(gAddressTo.GeocodeResponse.Latitude, gAddressTo.GeocodeResponse.Longitude);
@@ -101,8 +100,7 @@ namespace GetDistanceBetweenAddresses
             //SetAddress(address);
 
             ForwardGeocoder fg = new ForwardGeocoder();
-            ForwardGeocodeRequest fgr = new ForwardGeocodeRequest();
-            //essayer streetaddress
+            //ForwardGeocodeRequest fgr = new ForwardGeocodeRequest();
             Task<GeocodeResponse[]> ar = fg.Geocode(new ForwardGeocodeRequest
             {
                 queryString = Address,
